@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live Venue Guide | 全国コンサートホール・ライブ会場紹介</title>
   <meta name="description" content="全国のコンサートホールやライブ会場を検索。アクセス、キャパシティ、座席表、終電の検索が簡単にできるサイトです。">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,7 +22,7 @@
 
     <div class="header-search">
       <div class="search-container">
-        <input type="text" id="search-input" class="search-input" placeholder="🔍 ホール名を入力 (例: 東京ドーム、Zepp)" autocomplete="off">
+        <input type="text" id="search-input" class="search-input" placeholder="🔍 ホール名を入力" autocomplete="off">
         <ul id="autocomplete-list" class="autocomplete-list"></ul>
       </div>
     </div>
@@ -28,23 +30,36 @@
     <div id="venue-active-bar" class="venue-active-bar" style="display: none;">
       <span class="venue-active-icon">🎵</span>
       <span id="venue-active-name" class="venue-active-name">会場名</span>
-      <button id="close-venue-btn" class="close-venue-btn" aria-label="会場を閉じる">✕ 閉じる</button>
+      <button id="close-venue-btn" class="close-venue-btn" type="button">✕ 閉じる</button>
     </div>
   </header>
 
   <main>
+
     <section id="search-screen" class="screen active">
+
       <section class="settings-panel">
         <h2>🏠 自宅最寄り駅の設定</h2>
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-          事前に設定しておくと、会場からの経路や終電の検索がワンクリックでできます。<br>
+          事前に設定しておくと、会場から自宅への終電検索ができます。
         </p>
+
         <div class="input-group">
-          <input type="text" id="home-station" placeholder="例: 新宿駅、横浜駅">
-          <button id="save-station-btn" class="btn btn-accent">保存</button>
+          <input type="text" id="home-station" placeholder="例: 姫路駅、網干駅">
+          <button id="save-station-btn" class="btn btn-accent" type="button">保存</button>
         </div>
+
         <div class="privacy-note">
-          <i>🔒</i> 入力された情報はブラウザ内にのみ保存され、外部に送信されることはありません。
+          <i>🔒</i> 入力された情報はブラウザ内にのみ保存されます。
+        </div>
+      </section>
+
+      <section id="recent-section" class="favorites-section">
+        <div class="screen-title-row">
+          <h2>🕘 最近見た会場</h2>
+        </div>
+        <div id="recent-list" class="favorites-list">
+          <p class="favorites-empty">最近見た会場がここに表示されます。</p>
         </div>
       </section>
 
@@ -59,10 +74,12 @@
             <div class="info-label">キャパシティ</div>
             <div id="venue-capacity" class="info-value">--</div>
           </div>
+
           <div class="info-item">
             <div class="info-label">最寄り駅</div>
             <div id="venue-station" class="info-value">--</div>
           </div>
+
           <div class="info-item" style="grid-column: 1 / -1;">
             <div class="info-label">住所・エリア</div>
             <div id="venue-address" class="info-value">--</div>
@@ -73,33 +90,46 @@
           <div class="action-card">
             <h3>🗺️ アクセス・経路・終電</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-              最寄り駅から会場への徒歩ルートや、自宅への終電時間を一発検索できます。
+              最寄り駅から会場への徒歩ルートや、自宅への終電を検索できます。
             </p>
+
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-              <a id="google-map-link" href="#" class="external-link">🚶‍♂️ 駅から会場への徒歩ルート (Google Maps)</a>
-              <a id="transit-link" href="#" class="external-link primary" style="display: none;"></a>
+              <a id="google-map-link" href="#" class="external-link" target="_blank" rel="noopener noreferrer">
+                🚶‍♂️ 駅から会場への徒歩ルート
+              </a>
+
+              <a id="transit-link" href="#" class="external-link primary" style="display: none;" target="_blank" rel="noopener noreferrer">
+                🚃 終電を調べる
+              </a>
             </div>
           </div>
 
           <div class="action-card">
             <h3>💺 座席・スケジュール</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-              外部サイトは別タブで開きます。確認後はこのアプリのタブに戻ってください。
-            </p>
+
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-              <a id="official-link" href="#" class="external-link">🌐 公式サイトを開く（別タブ）</a>
-              <a id="seating-chart-link" href="#" class="external-link">公式サイトの座席表を確認</a>
-              <a id="schedule-link" href="#" class="external-link">📅 公式サイトのスケジュールを確認</a>
+              <a id="official-link" href="#" class="external-link" target="_blank" rel="noopener noreferrer">
+                🌐 公式サイトを開く
+              </a>
+
+              <a id="seating-chart-link" href="#" class="external-link" target="_blank" rel="noopener noreferrer">
+                💺 公式座席表を確認
+              </a>
+
+              <a id="schedule-link" href="#" class="external-link" target="_blank" rel="noopener noreferrer">
+                📅 スケジュールを確認
+              </a>
             </div>
           </div>
         </div>
 
         <div style="text-align: center; margin-top: 1rem;">
-          <button id="close-venue-btn-bottom" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid var(--card-border);">
+          <button id="close-venue-btn-bottom" class="btn" type="button" style="background: rgba(255,255,255,0.1); border: 1px solid var(--card-border);">
             ✕ 会場を閉じて検索に戻る
           </button>
         </div>
       </section>
+
     </section>
 
     <section id="favorites-screen" class="screen">
@@ -107,17 +137,23 @@
         <div class="screen-title-row">
           <div>
             <h2>⭐ お気に入り会場</h2>
-            <p class="screen-description">よく使う会場だけをここにまとめます。会場名を押すと詳細画面へ戻ります。</p>
+            <p class="screen-description">
+              よく行く会場をここからすぐ開けます。
+            </p>
           </div>
         </div>
-        <div id="favorites-list" class="favorites-list"></div>
+
+        <div id="favorites-list" class="favorites-list">
+          <p class="favorites-empty">お気に入り登録した会場がここに表示されます。</p>
+        </div>
       </section>
     </section>
+
   </main>
 
-  <nav class="bottom-nav" aria-label="画面切り替え">
-    <button id="nav-search" class="bottom-nav-btn active" type="button">🔍<span>検索</span></button>
-    <button id="nav-favorites" class="bottom-nav-btn" type="button">⭐<span>お気に入り</span></button>
+  <nav class="bottom-nav" aria-label="下部ナビ">
+    <button id="nav-search" class="bottom-nav-btn active" type="button">🔍 検索</button>
+    <button id="nav-favorites" class="bottom-nav-btn" type="button">⭐ お気に入り</button>
   </nav>
 
   <footer>
