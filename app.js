@@ -20,107 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const venueActiveName = document.getElementById('venue-active-name');
   const closeVenueBtn = document.getElementById('close-venue-btn');
   const closeVenueBtnBottom = document.getElementById('close-venue-btn-bottom');
-  const favoriteBtn = document.getElementById('favorite-btn');
-  const favoritesList = document.getElementById('favorites-list');
 
   let currentVenue = null;
-  const FAVORITE_KEY = 'favoriteVenues';
-  const MAX_FAVORITES = 10;
 
   function normalizeText(value) {
     return String(value || '').toLowerCase().replace(/\s+/g, '');
-  }
-
-  function getFavorites() {
-    try {
-      const raw = localStorage.getItem(FAVORITE_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function saveFavorites(ids) {
-    localStorage.setItem(FAVORITE_KEY, JSON.stringify(ids));
-  }
-
-  function isFavorite(venueId) {
-    return getFavorites().includes(venueId);
-  }
-
-  function updateFavoriteButton() {
-    if (!favoriteBtn || !currentVenue) return;
-
-    if (isFavorite(currentVenue.id)) {
-      favoriteBtn.textContent = '★ お気に入り済み';
-      favoriteBtn.classList.add('active');
-    } else {
-      favoriteBtn.textContent = '⭐ お気に入り';
-      favoriteBtn.classList.remove('active');
-    }
-  }
-
-  function renderFavorites() {
-    if (!favoritesList) return;
-
-    const favoriteIds = getFavorites();
-    favoritesList.innerHTML = '';
-
-    if (favoriteIds.length === 0) {
-      favoritesList.innerHTML = '<p class="favorites-empty">お気に入り登録した会場がここに表示されます</p>';
-      return;
-    }
-
-    favoriteIds.forEach((id) => {
-      const venue = venues.find(v => v.id === id);
-      if (!venue) return;
-
-      const card = document.createElement('div');
-      card.className = 'favorite-card';
-      card.innerHTML = `
-        <button class="favorite-open" type="button">
-          <span class="favorite-name">${venue.name}</span>
-          <span class="favorite-meta">${venue.prefecture || ''}${venue.area ? ' / ' + venue.area : ''}｜${venue.nearestStation || '最寄り駅未登録'}</span>
-        </button>
-        <button class="favorite-remove" type="button" aria-label="お気に入り解除">解除</button>
-      `;
-
-      card.querySelector('.favorite-open').addEventListener('click', () => {
-        searchInput.value = venue.name;
-        autocompleteList.classList.remove('active');
-        showVenueDetails(venue);
-      });
-
-      card.querySelector('.favorite-remove').addEventListener('click', (event) => {
-        event.stopPropagation();
-        saveFavorites(getFavorites().filter(favoriteId => favoriteId !== id));
-        renderFavorites();
-        updateFavoriteButton();
-      });
-
-      favoritesList.appendChild(card);
-    });
-  }
-
-  function toggleFavorite() {
-    if (!currentVenue) return;
-
-    const favoriteIds = getFavorites();
-    const alreadyFavorite = favoriteIds.includes(currentVenue.id);
-
-    if (alreadyFavorite) {
-      saveFavorites(favoriteIds.filter(id => id !== currentVenue.id));
-    } else {
-      if (favoriteIds.length >= MAX_FAVORITES) {
-        alert('お気に入りは最大10件です。古いものを削除してください。');
-        return;
-      }
-      saveFavorites([currentVenue.id, ...favoriteIds]);
-    }
-
-    updateFavoriteButton();
-    renderFavorites();
   }
 
   function openExternal(linkEl, url, visible = true) {
@@ -143,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const from = encodeURIComponent(venue.nearestStation || venue.name);
+    const from = encodeURIComponent(venue.nearestStation || );
     const to = encodeURIComponent(homeStation);
     const url = `https://transit.yahoo.co.jp/search/result?from=${from}&to=${to}&type=2&shin=1&ex=1&al=0&hb=0&lb=1&sr=0`;
 
@@ -155,16 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
     currentVenue = venue;
     localStorage.setItem('lastVenueId', venue.id);
 
-    venueNameEl.textContent = venue.name || '会場名';
+    venueNameEl.textContent =  || '会場名';
     venueCapacityEl.textContent = venue.capacity || '不明';
     venueStationEl.textContent = `${venue.nearestStation || '不明'}${venue.walkMinutes ? `（徒歩 ${venue.walkMinutes}）` : ''}`;
     venueAddressEl.textContent = venue.address || `${venue.prefecture || ''}${venue.area ? ' / ' + venue.area : ''}` || '未登録';
 
-    venueActiveName.textContent = venue.name || '会場名';
+    venueActiveName.textContent =  || '会場名';
     venueActiveBar.style.display = 'flex';
 
     const origin = encodeURIComponent(venue.nearestStation || '');
-    const destination = encodeURIComponent(venue.address || venue.name || '');
+    const destination = encodeURIComponent(venue.address ||  || '');
     const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=walking`;
     openExternal(googleMapLink, mapUrl);
 
@@ -172,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
     openExternal(seatingChartLink, venue.seatingChartUrl);
     openExternal(scheduleLink, venue.scheduleUrl);
     updateTransitLink(venue);
-    updateFavoriteButton();
 
     venueDetails.classList.add('active');
     document.body.classList.add('has-active-venue');
@@ -216,11 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const li = document.createElement('li');
       li.className = 'autocomplete-item';
       li.innerHTML = `
-        <span class="autocomplete-name">${venue.name}</span>
+        <span class="autocomplete-name">${}</span>
         <span class="autocomplete-meta">${venue.prefecture || ''}${venue.area ? ' / ' + venue.area : ''}</span>
       `;
       li.addEventListener('click', () => {
-        searchInput.value = venue.name;
+        searchInput.value = ;
         autocompleteList.classList.remove('active');
         showVenueDetails(venue);
       });
@@ -237,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (lastVenueId) {
     const lastVenue = venues.find(v => v.id === lastVenueId);
     if (lastVenue) {
-      searchInput.value = lastVenue.name;
+      searchInput.value = last;
       showVenueDetails(lastVenue);
     }
   }
@@ -270,8 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   closeVenueBtn.addEventListener('click', closeVenueDetails);
   closeVenueBtnBottom.addEventListener('click', closeVenueDetails);
-  favoriteBtn.addEventListener('click', toggleFavorite);
-  renderFavorites();
 
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.search-container')) {
