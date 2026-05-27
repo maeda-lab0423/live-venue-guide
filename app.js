@@ -22,10 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const favoritesList = document.getElementById('favorites-list');
   const recentList = document.getElementById('recent-list');
 
-  const venueActiveBar = document.getElementById('venue-active-bar');
-  const venueActiveName = document.getElementById('venue-active-name');
-  const closeVenueBtn = document.getElementById('close-venue-btn');
-  const closeVenueBtnBottom = document.getElementById('close-venue-btn-bottom');
+  const clearSearchBtn = document.getElementById('clear-search-btn');
 
   const searchScreen = document.getElementById('search-screen');
   const favoritesScreen = document.getElementById('favorites-screen');
@@ -41,51 +38,55 @@ document.addEventListener('DOMContentLoaded', () => {
     return venue.id || venue.name;
   }
 
+  function updateClearSearchButton() {
+    if (!clearSearchBtn) return;
+
+    const isSearchActive = searchScreen.classList.contains('active');
+
+    if (currentVenue && isSearchActive) {
+      clearSearchBtn.classList.add('visible');
+    } else {
+      clearSearchBtn.classList.remove('visible');
+    }
+  }
+
   function showSearchScreen() {
-  searchScreen.classList.add('active');
-  favoritesScreen.classList.remove('active');
-  mypageScreen.classList.remove('active');
+    searchScreen.classList.add('active');
+    favoritesScreen.classList.remove('active');
+    mypageScreen.classList.remove('active');
 
-  navSearch.classList.add('active');
-  navFavorites.classList.remove('active');
-  navMypage.classList.remove('active');
+    navSearch.classList.add('active');
+    navFavorites.classList.remove('active');
+    navMypage.classList.remove('active');
 
-  if (currentVenue && venueActiveBar) {
-    venueActiveBar.style.display = 'flex';
-  }
-}
-
-function showFavoritesScreen() {
-  favoritesScreen.classList.add('active');
-  searchScreen.classList.remove('active');
-  mypageScreen.classList.remove('active');
-
-  navFavorites.classList.add('active');
-  navSearch.classList.remove('active');
-  navMypage.classList.remove('active');
-
-  if (venueActiveBar) {
-    venueActiveBar.style.display = 'none';
+    updateClearSearchButton();
   }
 
-  renderFavorites();
-}
+  function showFavoritesScreen() {
+    favoritesScreen.classList.add('active');
+    searchScreen.classList.remove('active');
+    mypageScreen.classList.remove('active');
 
-function showMyPageScreen() {
-  mypageScreen.classList.add('active');
-  searchScreen.classList.remove('active');
-  favoritesScreen.classList.remove('active');
+    navFavorites.classList.add('active');
+    navSearch.classList.remove('active');
+    navMypage.classList.remove('active');
 
-  navMypage.classList.add('active');
-  navSearch.classList.remove('active');
-  navFavorites.classList.remove('active');
-
-  if (venueActiveBar) {
-    venueActiveBar.style.display = 'none';
+    updateClearSearchButton();
+    renderFavorites();
   }
 
-  updateMyPage();
-}
+  function showMyPageScreen() {
+    mypageScreen.classList.add('active');
+    searchScreen.classList.remove('active');
+    favoritesScreen.classList.remove('active');
+
+    navMypage.classList.add('active');
+    navSearch.classList.remove('active');
+    navFavorites.classList.remove('active');
+
+    updateClearSearchButton();
+    updateMyPage();
+  }
 
   function getFavorites() {
     try {
@@ -174,6 +175,7 @@ function showMyPageScreen() {
         <span class="favorite-name">${venue.name}</span>
         <span class="favorite-meta">${venue.nearestStation || ''}</span>
       `;
+
       openBtn.addEventListener('click', () => {
         searchInput.value = venue.name;
         showSearchScreen();
@@ -294,11 +296,6 @@ function showMyPageScreen() {
     venueStationEl.textContent = venue.nearestStation || '情報なし';
     venueCapacityEl.textContent = venue.capacity || '情報なし';
 
-    if (venueActiveBar && venueActiveName) {
-      venueActiveName.textContent = venue.name || '';
-      venueActiveBar.style.display = 'flex';
-    }
-
     googleMapLink.href = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(venue.nearestStation || '')}&destination=${encodeURIComponent(venue.name || '')}&travelmode=walking`;
     googleMapLink.target = '_blank';
     googleMapLink.rel = 'noopener noreferrer';
@@ -336,6 +333,7 @@ function showMyPageScreen() {
     updateFavoriteButton(venue);
 
     venueDetails.classList.add('active');
+    updateClearSearchButton();
   }
 
   function closeVenueDetails() {
@@ -345,9 +343,7 @@ function showMyPageScreen() {
     searchInput.value = '';
     autocompleteList.classList.remove('active');
 
-    if (venueActiveBar) {
-      venueActiveBar.style.display = 'none';
-    }
+    updateClearSearchButton();
   }
 
   const savedStation = localStorage.getItem('homeStation');
@@ -438,12 +434,8 @@ function showMyPageScreen() {
     favoriteBtn.addEventListener('click', toggleFavorite);
   }
 
-  if (closeVenueBtn) {
-    closeVenueBtn.addEventListener('click', closeVenueDetails);
-  }
-
-  if (closeVenueBtnBottom) {
-    closeVenueBtnBottom.addEventListener('click', closeVenueDetails);
+  if (clearSearchBtn) {
+    clearSearchBtn.addEventListener('click', closeVenueDetails);
   }
 
   if (navSearch) {
@@ -461,4 +453,5 @@ function showMyPageScreen() {
   renderFavorites();
   renderRecentVenues();
   updateMyPage();
+  updateClearSearchButton();
 });
