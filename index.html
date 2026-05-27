@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Venue Guide | 全国コンサートホール・ライブ会場紹介</title>
+  <meta name="description" content="全国のコンサートホールやライブ会場を検索。アクセス、キャパシティ、座席表、終電の検索が簡単にできるサイトです。">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 固定ヘッダー（検索バー込み） -->
+  <header id="site-header">
+    <div class="header-top">
+      <h1>Live Venue Guide</h1>
+      <p class="header-subtitle">全国のコンサートホール・ライブ会場</p>
+    </div>
+
+    <!-- 検索バー：常に固定表示 -->
+    <div class="header-search">
+      <div class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="🔍 ホール名を入力 (例: 東京ドーム、Zepp)" autocomplete="off">
+        <ul id="autocomplete-list" class="autocomplete-list">
+          <!-- Autocomplete items injected by JS -->
+        </ul>
+      </div>
+    </div>
+
+    <!-- 会場選択中バナー（会場名 + 閉じるボタン） -->
+    <div id="venue-active-bar" class="venue-active-bar" style="display: none;">
+      <span class="venue-active-icon">🎵</span>
+      <span id="venue-active-name" class="venue-active-name">会場名</span>
+      <button id="close-venue-btn" class="close-venue-btn" aria-label="会場を閉じる">✕ 閉じる</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Settings Panel -->
+    <section class="settings-panel">
+      <h2>🏠 自宅最寄り駅の設定</h2>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+        事前に設定しておくと、会場からの経路や終電の検索がワンクリックでできます。<br>
+      </p>
+      <div class="input-group">
+        <input type="text" id="home-station" placeholder="例: 新宿駅、横浜駅">
+        <button id="save-station-btn" class="btn btn-accent">保存</button>
+      </div>
+      <div class="privacy-note">
+        <i>🔒</i> 入力された情報はブラウザ内にのみ保存され、外部に送信されることは絶対にありません。
+      </div>
+    </section>
+
+    <!-- Venue Details Section -->
+    <section id="venue-details" class="venue-details">
+      <div class="venue-header">
+        <h2 id="venue-name" class="venue-name">会場名</h2>
+      </div>
+
+      <div class="venue-info-grid">
+        <div class="info-item">
+          <div class="info-label">キャパシティ</div>
+          <div id="venue-capacity" class="info-value">--</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">最寄り駅</div>
+          <div id="venue-station" class="info-value">--</div>
+        </div>
+        <div class="info-item" style="grid-column: 1 / -1;">
+          <div class="info-label">住所・エリア</div>
+          <div id="venue-address" class="info-value">--</div>
+        </div>
+      </div>
+
+      <div class="venue-actions">
+        <div class="action-card">
+          <h3>🗺️ アクセス・経路・終電</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            最寄り駅から会場への徒歩ルートや、自宅への終電時間を一発検索できます。
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a id="google-map-link" href="#" class="external-link">
+              🚶‍♂️ 駅から会場への徒歩ルート (Google Maps)
+            </a>
+            <a id="transit-link" href="#" class="external-link primary" style="display: none;">
+              <!-- Text injected by JS -->
+            </a>
+          </div>
+        </div>
+
+        <div class="action-card">
+          <h3>💺 座席・スケジュール</h3>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a id="official-link" href="#" class="external-link">
+              🌐 公式サイトを開く
+            </a>
+            <a id="seating-chart-link" href="#" class="external-link">
+              公式サイトの座席表を確認
+            </a>
+            <a id="schedule-link" href="#" class="external-link">
+              📅 公式サイトのスケジュールを確認
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- アプリ内「会場を閉じる」ボタン（下部にも設置） -->
+      <div style="text-align: center; margin-top: 1rem;">
+        <button id="close-venue-btn-bottom" class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid var(--card-border);">
+          ✕ 会場を閉じて検索に戻る
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Live Venue Guide</p>
+  </footer>
+
+  <!-- App Logic -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
