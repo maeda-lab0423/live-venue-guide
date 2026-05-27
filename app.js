@@ -1,182 +1,156 @@
+// import { venues } from './data.js'; // ローカルファイル実行エラー回避のためコメントアウト
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Elements
   const searchInput = document.getElementById('search-input');
   const autocompleteList = document.getElementById('autocomplete-list');
   const homeStationInput = document.getElementById('home-station');
   const saveStationBtn = document.getElementById('save-station-btn');
-
+  
   const venueDetails = document.getElementById('venue-details');
   const venueNameEl = document.getElementById('venue-name');
   const venueAddressEl = document.getElementById('venue-address');
   const venueStationEl = document.getElementById('venue-station');
   const venueCapacityEl = document.getElementById('venue-capacity');
-
+  
   const googleMapLink = document.getElementById('google-map-link');
-  const transitLink = document.getElementById('transit-link');
-  const officialLink = document.getElementById('official-link');
   const seatingChartLink = document.getElementById('seating-chart-link');
   const scheduleLink = document.getElementById('schedule-link');
-
-  const venueActiveBar = document.getElementById('venue-active-bar');
-  const venueActiveName = document.getElementById('venue-active-name');
-  const closeVenueBtn = document.getElementById('close-venue-btn');
-  const closeVenueBtnBottom = document.getElementById('close-venue-btn-bottom');
+  const transitLink = document.getElementById('transit-link');
 
   let currentVenue = null;
 
-  function normalizeText(value) {
-    return String(value || '').toLowerCase().replace(/\s+/g, '');
-  }
-
-  function openExternal(linkEl, url, visible = true) {
-    if (!linkEl) return;
-    if (!url || url === 'なし' || url === '不明') {
-      linkEl.style.display = 'none';
-      linkEl.removeAttribute('href');
-      return;
-    }
-    linkEl.href = url;
-    linkEl.target = '_blank';
-    linkEl.rel = 'noopener noreferrer';
-    linkEl.style.display = visible ? 'inline-flex' : 'none';
-  }
+  // =====================
+  // 関数定義（先に宣言）
+  // =====================
 
   function updateTransitLink(venue) {
     const homeStation = localStorage.getItem('homeStation');
-    if (!homeStation || !venue) {
+    if (homeStation) {
+      // Yahoo!乗換案内の終電検索 (type=2 が終電) を利用
+      // 夜行バスや飛行機が終電として判定されないよう、新幹線・特急をON(shin=1, ex=1)、飛行機・高速バス・フェリーをOFF(al=0, hb=0, sr=0)にする
+      const from = encodeURIComponent(venue.nearestStation);
+      const to = encodeURIComponent(homeStation);
+      
+      transitLink.href = `https://transit.yahoo.co.jp/search/result?from=${from}&to=${to}&type=2&shin=1&ex=1&al=0&hb=0&lb=1&sr=0`;
+      transitLink.textContent = `🚃 ${homeStation} への終電を調べる (Yahoo!乗換案内)`;
+      transitLink.style.display = 'inline-flex';
+    } else {
       transitLink.style.display = 'none';
-      return;
     }
-
-    const from = encodeURIComponent(venue.nearestStation || );
-    const to = encodeURIComponent(homeStation);
-    const url = `https://transit.yahoo.co.jp/search/result?from=${from}&to=${to}&type=2&shin=1&ex=1&al=0&hb=0&lb=1&sr=0`;
-
-    transitLink.textContent = `🚃 ${homeStation} への終電を調べる`;
-    openExternal(transitLink, url);
   }
 
   function showVenueDetails(venue) {
     currentVenue = venue;
+    // 会場をlocalStorageに保存（「戻る」で戻ってきたとき用）
     localStorage.setItem('lastVenueId', venue.id);
+    
+    // Update basic info
+    venueNameEl.textContent = venue.name;
+    venueAddressEl.textContent = venue.address;
+    venueStationEl.textContent = venue.nearestStation;
+    venueCapacityEl.textContent = venue.capacity;
 
-    venueNameEl.textContent =  || '会場名';
-    venueCapacityEl.textContent = venue.capacity || '不明';
-    venueStationEl.textContent = `${venue.nearestStation || '不明'}${venue.walkMinutes ? `（徒歩 ${venue.walkMinutes}）` : ''}`;
-    venueAddressEl.textContent = venue.address || `${venue.prefecture || ''}${venue.area ? ' / ' + venue.area : ''}` || '未登録';
+    // Google Maps Route (Walking from nearest station to venue)
+    googleMapLink.href = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(venue.nearestStation)}&destination=${encodeURIComponent(venue.name)}&travelmode=walking`;
 
-    venueActiveName.textContent =  || '会場名';
-    venueActiveBar.style.display = 'flex';
+    // Seating Chart
+    seatingChartLink.href = venue.seatingChartUrl;
 
-    const origin = encodeURIComponent(venue.nearestStation || '');
-    const destination = encodeURIComponent(venue.address ||  || '');
-    const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=walking`;
-    openExternal(googleMapLink, mapUrl);
+    // Schedule Link
+    if (venue.scheduleUrl) {
+      scheduleLink.href = venue.scheduleUrl;
+      scheduleLink.style.display = 'inline-flex';
+    } else {
+      scheduleLink.style.display = 'none';
+    }
 
-    openExternal(officialLink, venue.officialUrl);
-    openExternal(seatingChartLink, venue.seatingChartUrl);
-    openExternal(scheduleLink, venue.scheduleUrl);
+    // Transit / Last Train Link
     updateTransitLink(venue);
 
     venueDetails.classList.add('active');
-    document.body.classList.add('has-active-venue');
-    venueDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function closeVenueDetails() {
-    currentVenue = null;
-    localStorage.removeItem('lastVenueId');
-    searchInput.value = '';
-    autocompleteList.innerHTML = '';
-    autocompleteList.classList.remove('active');
-    venueDetails.classList.remove('active');
-    venueActiveBar.style.display = 'none';
-    document.body.classList.remove('has-active-venue');
-    searchInput.focus();
+  // =====================
+  // 初期化処理
+  // =====================
+
+  // 自宅最寄り駅を復元
+  const savedStation = localStorage.getItem('homeStation');
+  if (savedStation) {
+    homeStationInput.value = savedStation;
   }
 
-  function renderAutocomplete(query) {
-    autocompleteList.innerHTML = '';
-    const normalizedQuery = normalizeText(query);
+  // 直前に表示していた会場を復元（「戻る」ボタン対応）
+  const lastVenueId = localStorage.getItem('lastVenueId');
+  if (lastVenueId) {
+    const lastVenue = venues.find(v => v.id === lastVenueId);
+    if (lastVenue) {
+      searchInput.value = lastVenue.name;
+      showVenueDetails(lastVenue);
+    }
+  }
 
-    if (!normalizedQuery) {
+  // =====================
+  // イベントリスナー
+  // =====================
+
+  // Save station handler
+  saveStationBtn.addEventListener('click', () => {
+    const station = homeStationInput.value.trim();
+    if (station) {
+      localStorage.setItem('homeStation', station);
+      alert('自宅の最寄り駅を保存しました。この情報はブラウザ内にのみ保存されます。');
+    } else {
+      localStorage.removeItem('homeStation');
+      alert('設定をクリアしました。');
+    }
+    
+    // If a venue is already selected, update the transit link
+    if (currentVenue) {
+      updateTransitLink(currentVenue);
+    }
+  });
+
+  // Autocomplete logic
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.trim().toLowerCase();
+    autocompleteList.innerHTML = '';
+    
+    if (query.length < 1) {
       autocompleteList.classList.remove('active');
       return;
     }
 
     const matches = venues.filter(v => {
-      const target = [v.name, v.prefecture, v.area, v.nearestStation, ...(v.aliases || [])]
-        .map(normalizeText)
-        .join(' ');
-      return target.includes(normalizedQuery);
-    }).slice(0, 12);
-
-    if (matches.length === 0) {
-      autocompleteList.classList.remove('active');
-      return;
-    }
-
-    matches.forEach(venue => {
-      const li = document.createElement('li');
-      li.className = 'autocomplete-item';
-      li.innerHTML = `
-        <span class="autocomplete-name">${}</span>
-        <span class="autocomplete-meta">${venue.prefecture || ''}${venue.area ? ' / ' + venue.area : ''}</span>
-      `;
-      li.addEventListener('click', () => {
-        searchInput.value = ;
-        autocompleteList.classList.remove('active');
-        showVenueDetails(venue);
-      });
-      autocompleteList.appendChild(li);
+      const matchName = v.name.toLowerCase().includes(query);
+      const matchAlias = v.aliases.some(alias => alias.includes(query));
+      return matchName || matchAlias;
     });
 
-    autocompleteList.classList.add('active');
-  }
-
-  const savedStation = localStorage.getItem('homeStation');
-  if (savedStation) homeStationInput.value = savedStation;
-
-  const lastVenueId = localStorage.getItem('lastVenueId');
-  if (lastVenueId) {
-    const lastVenue = venues.find(v => v.id === lastVenueId);
-    if (lastVenue) {
-      searchInput.value = last;
-      showVenueDetails(lastVenue);
-    }
-  }
-
-  saveStationBtn.addEventListener('click', () => {
-    const station = homeStationInput.value.trim();
-    if (station) {
-      localStorage.setItem('homeStation', station);
-      alert('自宅の最寄り駅を保存しました。');
+    if (matches.length > 0) {
+      matches.forEach(venue => {
+        const li = document.createElement('li');
+        li.className = 'autocomplete-item';
+        li.textContent = venue.name;
+        li.addEventListener('click', () => {
+          searchInput.value = venue.name;
+          autocompleteList.classList.remove('active');
+          showVenueDetails(venue);
+        });
+        autocompleteList.appendChild(li);
+      });
+      autocompleteList.classList.add('active');
     } else {
-      localStorage.removeItem('homeStation');
-      alert('自宅の最寄り駅をクリアしました。');
-    }
-    if (currentVenue) updateTransitLink(currentVenue);
-  });
-
-  homeStationInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') saveStationBtn.click();
-  });
-
-  searchInput.addEventListener('input', (e) => renderAutocomplete(e.target.value));
-
-  searchInput.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-    const query = normalizeText(searchInput.value);
-    const venue = venues.find(v => normalizeText(v.name) === query) ||
-      venues.find(v => normalizeText(v.name).includes(query));
-    if (venue) showVenueDetails(venue);
-  });
-
-  closeVenueBtn.addEventListener('click', closeVenueDetails);
-  closeVenueBtnBottom.addEventListener('click', closeVenueDetails);
-
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.search-container')) {
       autocompleteList.classList.remove('active');
     }
   });
+
+  // Hide autocomplete when clicking outside
+  document.addEventListener('click', (e) => {
+    if (e.target !== searchInput && e.target !== autocompleteList) {
+      autocompleteList.classList.remove('active');
+    }
+  });
+
 });
