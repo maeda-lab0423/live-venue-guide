@@ -154,8 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFavoriteButton(currentVenue);
       });
 
-      card.appendChild(openBtn);
       card.appendChild(removeBtn);
+      card.appendChild(openBtn);
       favoritesList.appendChild(card);
     });
   }
