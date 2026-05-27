@@ -42,46 +42,50 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showSearchScreen() {
-    searchScreen.classList.add('active');
-    favoritesScreen.classList.remove('active');
-    mypageScreen.classList.remove('active');
+  searchScreen.classList.add('active');
+  favoritesScreen.classList.remove('active');
+  mypageScreen.classList.remove('active');
 
-    navSearch.classList.add('active');
-    navFavorites.classList.remove('active');
-    navMypage.classList.remove('active');
-  }
+  navSearch.classList.add('active');
+  navFavorites.classList.remove('active');
+  navMypage.classList.remove('active');
 
-  function showFavoritesScreen() {
-    favoritesScreen.classList.add('active');
-    searchScreen.classList.remove('active');
-    mypageScreen.classList.remove('active');
-
-    navFavorites.classList.add('active');
-    navSearch.classList.remove('active');
-    navMypage.classList.remove('active');
-     if (venueActiveBar) {
-    venueActiveBar.style.display = 'none';
-
-       if (currentVenue && venueActiveBar) {
+  if (currentVenue && venueActiveBar) {
     venueActiveBar.style.display = 'flex';
   }
-    renderFavorites();
-  }
+}
 
-  function showMyPageScreen() {
-    mypageScreen.classList.add('active');
-    searchScreen.classList.remove('active');
-    favoritesScreen.classList.remove('active');
+function showFavoritesScreen() {
+  favoritesScreen.classList.add('active');
+  searchScreen.classList.remove('active');
+  mypageScreen.classList.remove('active');
 
-    navMypage.classList.add('active');
-    navSearch.classList.remove('active');
-    navFavorites.classList.remove('active');
+  navFavorites.classList.add('active');
+  navSearch.classList.remove('active');
+  navMypage.classList.remove('active');
 
-     if (venueActiveBar) {
+  if (venueActiveBar) {
     venueActiveBar.style.display = 'none';
   }
-    updateMyPage();
+
+  renderFavorites();
+}
+
+function showMyPageScreen() {
+  mypageScreen.classList.add('active');
+  searchScreen.classList.remove('active');
+  favoritesScreen.classList.remove('active');
+
+  navMypage.classList.add('active');
+  navSearch.classList.remove('active');
+  navFavorites.classList.remove('active');
+
+  if (venueActiveBar) {
+    venueActiveBar.style.display = 'none';
   }
+
+  updateMyPage();
+}
 
   function getFavorites() {
     try {
