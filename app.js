@@ -59,7 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
     navFavorites.classList.add('active');
     navSearch.classList.remove('active');
     navMypage.classList.remove('active');
+     if (venueActiveBar) {
+    venueActiveBar.style.display = 'none';
 
+       if (currentVenue && venueActiveBar) {
+    venueActiveBar.style.display = 'flex';
+  }
     renderFavorites();
   }
 
@@ -72,6 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
     navSearch.classList.remove('active');
     navFavorites.classList.remove('active');
 
+     if (venueActiveBar) {
+    venueActiveBar.style.display = 'none';
+  }
     updateMyPage();
   }
 
