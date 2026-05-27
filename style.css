@@ -494,3 +494,126 @@ footer {
     z-index: 999;
   }
 }
+
+/* Favorites */
+.favorites-section {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  backdrop-filter: var(--glass-blur);
+}
+
+.favorites-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.favorites-empty {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.favorite-card {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 0.65rem;
+}
+
+.favorite-open {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.favorite-name {
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.favorite-meta {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.favorite-remove {
+  flex: 0 0 auto;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  padding: 0.45rem 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.favorite-remove:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.venue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.favorite-btn {
+  flex: 0 0 auto;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.12);
+  color: #fde68a;
+  padding: 0.55rem 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.favorite-btn.active {
+  background: rgba(251, 191, 36, 0.24);
+  border-color: rgba(251, 191, 36, 0.75);
+}
+
+@media (max-width: 600px) {
+  .favorites-section {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  .favorite-card {
+    flex-direction: column;
+  }
+
+  .favorite-remove {
+    width: 100%;
+  }
+
+  .venue-header {
+    flex-direction: column;
+  }
+
+  .favorite-btn {
+    width: 100%;
+  }
+}
