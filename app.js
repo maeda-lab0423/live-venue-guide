@@ -29,8 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const searchScreen = document.getElementById('search-screen');
   const favoritesScreen = document.getElementById('favorites-screen');
+  const mypageScreen = document.getElementById('mypage-screen');
+
   const navSearch = document.getElementById('nav-search');
   const navFavorites = document.getElementById('nav-favorites');
+  const navMypage = document.getElementById('nav-mypage');
 
   let currentVenue = null;
 
@@ -41,16 +44,35 @@ document.addEventListener('DOMContentLoaded', () => {
   function showSearchScreen() {
     searchScreen.classList.add('active');
     favoritesScreen.classList.remove('active');
+    mypageScreen.classList.remove('active');
+
     navSearch.classList.add('active');
     navFavorites.classList.remove('active');
+    navMypage.classList.remove('active');
   }
 
   function showFavoritesScreen() {
     favoritesScreen.classList.add('active');
     searchScreen.classList.remove('active');
+    mypageScreen.classList.remove('active');
+
     navFavorites.classList.add('active');
     navSearch.classList.remove('active');
+    navMypage.classList.remove('active');
+
     renderFavorites();
+  }
+
+  function showMyPageScreen() {
+    mypageScreen.classList.add('active');
+    searchScreen.classList.remove('active');
+    favoritesScreen.classList.remove('active');
+
+    navMypage.classList.add('active');
+    navSearch.classList.remove('active');
+    navFavorites.classList.remove('active');
+
+    updateMyPage();
   }
 
   function getFavorites() {
@@ -100,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveFavorites(favorites);
     updateFavoriteButton(currentVenue);
     renderFavorites();
+    updateMyPage();
   }
 
   function renderFavorites() {
@@ -129,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveFavorites(updated);
         renderFavorites();
         updateFavoriteButton(currentVenue);
+        updateMyPage();
       });
 
       const openBtn = document.createElement('button');
@@ -168,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     localStorage.setItem('recentVenues', JSON.stringify(recent));
     renderRecentVenues();
+    updateMyPage();
   }
 
   function renderRecentVenues() {
@@ -205,6 +230,28 @@ document.addEventListener('DOMContentLoaded', () => {
       card.appendChild(openBtn);
       recentList.appendChild(card);
     });
+  }
+
+  function updateMyPage() {
+    const homeStation = localStorage.getItem('homeStation') || '未設定';
+    const favorites = getFavorites();
+    const recent = getRecentVenues();
+
+    const homeStationEl = document.getElementById('mypage-home-station');
+    const favoritesCountEl = document.getElementById('mypage-favorites-count');
+    const recentCountEl = document.getElementById('mypage-recent-count');
+
+    if (homeStationEl) {
+      homeStationEl.textContent = homeStation;
+    }
+
+    if (favoritesCountEl) {
+      favoritesCountEl.textContent = `${favorites.length}件`;
+    }
+
+    if (recentCountEl) {
+      recentCountEl.textContent = `${recent.length}件`;
+    }
   }
 
   function updateTransitLink(venue) {
@@ -319,6 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentVenue) {
       updateTransitLink(currentVenue);
     }
+
+    updateMyPage();
   });
 
   searchInput.addEventListener('input', (e) => {
@@ -393,6 +442,11 @@ document.addEventListener('DOMContentLoaded', () => {
     navFavorites.addEventListener('click', showFavoritesScreen);
   }
 
+  if (navMypage) {
+    navMypage.addEventListener('click', showMyPageScreen);
+  }
+
   renderFavorites();
   renderRecentVenues();
+  updateMyPage();
 });
