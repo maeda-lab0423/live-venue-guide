@@ -575,7 +575,6 @@ if (recentToggleBtn && recentPanel) {
   });
 }
   
-
   renderFavorites();
   renderRecentVenues();
   updateMyPage();
