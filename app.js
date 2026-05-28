@@ -99,9 +99,12 @@ const recordList = document.getElementById('record-list');
 
     if (headerSearchArea) headerSearchArea.style.display = 'none';
 
-    updateClearSearchButton();
-    updateMyPage();
-    function getLiveRecords() {
+   updateClearSearchButton();
+updateMyPage();
+
+}
+    
+function getLiveRecords() {
   try {
     return JSON.parse(localStorage.getItem('liveRecords')) || [];
   } catch (e) {
@@ -579,8 +582,8 @@ if (recentToggleBtn && recentPanel) {
   renderRecentVenues();
   updateMyPage();
   updateStationSettingView();
-　updateClearSearchButton();
-　renderLiveRecords();
+updateClearSearchButton();
+renderLiveRecords();
 
 
 let touchStartX = 0;
