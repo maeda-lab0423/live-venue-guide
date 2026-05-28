@@ -99,11 +99,10 @@ const recordList = document.getElementById('record-list');
 
     if (headerSearchArea) headerSearchArea.style.display = 'none';
 
-   updateClearSearchButton();
+updateClearSearchButton();
 updateMyPage();
-
 }
-    
+
 function getLiveRecords() {
   try {
     return JSON.parse(localStorage.getItem('liveRecords')) || [];
