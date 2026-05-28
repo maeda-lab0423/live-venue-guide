@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const navSearch = document.getElementById('nav-search');
   const navFavorites = document.getElementById('nav-favorites');
   const navMypage = document.getElementById('nav-mypage');
+  const siteHeader = document.getElementById('site-header');
 
   let currentVenue = null;
 
@@ -50,43 +51,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function showSearchScreen() {
-    searchScreen.classList.add('active');
-    favoritesScreen.classList.remove('active');
-    mypageScreen.classList.remove('active');
+ function showSearchScreen() {
+  searchScreen.classList.add('active');
+  favoritesScreen.classList.remove('active');
+  mypageScreen.classList.remove('active');
 
-    navSearch.classList.add('active');
-    navFavorites.classList.remove('active');
-    navMypage.classList.remove('active');
+  navSearch.classList.add('active');
+  navFavorites.classList.remove('active');
+  navMypage.classList.remove('active');
 
-    updateClearSearchButton();
+  if (siteHeader) {
+    siteHeader.style.display = 'block';
   }
 
-  function showFavoritesScreen() {
-    favoritesScreen.classList.add('active');
-    searchScreen.classList.remove('active');
-    mypageScreen.classList.remove('active');
+  updateClearSearchButton();
+}
 
-    navFavorites.classList.add('active');
-    navSearch.classList.remove('active');
-    navMypage.classList.remove('active');
+function showFavoritesScreen() {
+  favoritesScreen.classList.add('active');
+  searchScreen.classList.remove('active');
+  mypageScreen.classList.remove('active');
 
-    updateClearSearchButton();
-    renderFavorites();
+  navFavorites.classList.add('active');
+  navSearch.classList.remove('active');
+  navMypage.classList.remove('active');
+
+  if (siteHeader) {
+    siteHeader.style.display = 'none';
   }
 
-  function showMyPageScreen() {
-    mypageScreen.classList.add('active');
-    searchScreen.classList.remove('active');
-    favoritesScreen.classList.remove('active');
+  updateClearSearchButton();
+  renderFavorites();
+}
 
-    navMypage.classList.add('active');
-    navSearch.classList.remove('active');
-    navFavorites.classList.remove('active');
+function showMyPageScreen() {
+  mypageScreen.classList.add('active');
+  searchScreen.classList.remove('active');
+  favoritesScreen.classList.remove('active');
 
-    updateClearSearchButton();
-    updateMyPage();
+  navMypage.classList.add('active');
+  navSearch.classList.remove('active');
+  navFavorites.classList.remove('active');
+
+  if (siteHeader) {
+    siteHeader.style.display = 'none';
   }
+
+  updateClearSearchButton();
+  updateMyPage();
+}
 
   function getFavorites() {
     try {
