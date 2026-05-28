@@ -550,9 +550,9 @@ if (clearSearchBtn) {
   if (navSearch) navSearch.addEventListener('click', showSearchScreen);
   if (navFavorites) navFavorites.addEventListener('click', showFavoritesScreen);
   if (navMypage) navMypage.addEventListener('click', showMyPageScreen);
-  if (saveRecordBtn) {
-  saveRecordBtn.addEventListener('click', addLiveRecord);
-}
+  //if (saveRecordBtn) {
+  //saveRecordBtn.addEventListener('click', addLiveRecord);
+//}
   if (changeStationBtn) {
   changeStationBtn.addEventListener('click', () => {
     stationDisplayArea.style.display = 'none';
