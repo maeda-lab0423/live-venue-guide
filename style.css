@@ -736,4 +736,66 @@ body {
 
 .venue-active-bar {
   display: none !important;
+  .recent-panel {
+  position: fixed;
+  top: 120px;
+  right: -320px;
+  width: 300px;
+  max-height: 70vh;
+  overflow-y: auto;
+  z-index: 300;
+
+  transition: right 0.35s ease;
+
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid var(--card-border);
+  border-radius: 16px 0 0 16px;
+  padding: 1rem;
+
+  backdrop-filter: blur(14px);
+  box-shadow: -10px 0 30px rgba(0,0,0,0.35);
+}
+
+.recent-panel.open {
+  right: 0;
+}
+
+#recent-toggle-btn,
+#recent-close-btn {
+  position: fixed;
+  top: 180px;
+  z-index: 301;
+
+  width: 34px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid var(--card-border);
+
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+#recent-toggle-btn {
+  right: 0;
+  border-radius: 12px 0 0 12px;
+}
+
+#recent-close-btn {
+  right: 300px;
+  border-radius: 12px 0 0 12px;
+  display: none;
+}
+
+.recent-panel.open + #recent-close-btn {
+  display: flex;
+}
 }
