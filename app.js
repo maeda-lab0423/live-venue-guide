@@ -448,13 +448,18 @@ if (clearSearchBtn) {
   if (navSearch) navSearch.addEventListener('click', showSearchScreen);
   if (navFavorites) navFavorites.addEventListener('click', showFavoritesScreen);
   if (navMypage) navMypage.addEventListener('click', showMyPageScreen);
-  const recentPanel = document.getElementById('recent-section');
+ const recentPanel = document.getElementById('recent-section');
 const recentToggleBtn = document.getElementById('recent-toggle-btn');
-const recentCloseBtn = document.getElementById('recent-close-btn');
 
-if (recentToggleBtn) {
+if (recentToggleBtn && recentPanel) {
   recentToggleBtn.addEventListener('click', () => {
-    recentPanel.classList.add('open');
+    recentPanel.classList.toggle('open');
+
+    if (recentPanel.classList.contains('open')) {
+      recentToggleBtn.textContent = '＞';
+    } else {
+      recentToggleBtn.textContent = '＜';
+    }
   });
 }
 
