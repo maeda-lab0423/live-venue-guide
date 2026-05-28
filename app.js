@@ -376,13 +376,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.trim().toLowerCase();
-    autocompleteList.innerHTML = '';
+  const query = e.target.value.trim().toLowerCase();
 
-    if (query.length < 2) {
-      autocompleteList.classList.remove('active');
-      return;
-    }
+  autocompleteList.innerHTML = '';
+
+  if (query.length < 2) {
+    autocompleteList.classList.remove('active');
+    return;
+  }
 
     const matches = venues.filter(v => {
       const aliases = Array.isArray(v.aliases) ? v.aliases : [];
