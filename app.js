@@ -400,22 +400,24 @@ function showMyPageScreen() {
       return;
     }
 
-    const matches = venues.filter(v => {
-      const name = (v.name || '').toLowerCase();
-      const aliases = Array.isArray(v.aliases) ? v.aliases : [];
+const name = (v.name || '').toLowerCase();
+const kana = (v.kana || '').toLowerCase();
+const aliases = Array.isArray(v.aliases) ? v.aliases : [];
 
 const matchName =
   query.length === 1
     ? name.startsWith(query)
     : name.includes(query);
 
+const matchKana = kana.includes(query);
+
 const matchAlias =
   query.length >= 2 &&
   aliases.some(alias =>
     String(alias).toLowerCase().includes(query)
   );
-      return matchName || matchAlias;
-    });
+
+return matchName || matchKana || matchAlias;
 
     if (matches.length > 0) {
       matches.forEach(venue => {
