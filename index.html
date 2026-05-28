@@ -33,22 +33,7 @@
 
     <section id="search-screen" class="screen active">
 
-      <section class="settings-panel">
-        <h2>🏠 自宅最寄り駅の設定</h2>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
-          事前に設定しておくと、会場から自宅への終電検索ができます。
-        </p>
-
-        <div class="input-group">
-          <input type="text" id="home-station" placeholder="例: 姫路駅、網干駅">
-          <button id="save-station-btn" class="btn btn-accent" type="button">保存</button>
-        </div>
-
-        <div class="privacy-note">
-          <i>🔒</i> 入力された情報はブラウザ内にのみ保存されます。
-        </div>
-      </section>
-<section id="mypage-screen" class="screen">
+     
 
   <section class="favorites-section">
 
@@ -58,6 +43,33 @@
         <p class="screen-description">
           あなたのライブ記録や設定をまとめるページです。
         </p>
+<section id="mypage-station-setting" class="settings-panel">
+  <h2>🏠 自宅最寄り駅の設定</h2>
+
+  <div id="station-display-area">
+    <p class="screen-description">登録済みの最寄り駅</p>
+    <div id="station-display-name" class="info-value">未設定</div>
+    <button id="change-station-btn" class="btn" type="button">変更する</button>
+  </div>
+
+  <div id="station-edit-area" style="display: none;">
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+      会場から自宅への終電検索に使います。
+    </p>
+
+    <div class="input-group">
+      <input type="text" id="home-station" placeholder="例: 姫路駅、網干駅">
+      <button id="save-station-btn" class="btn btn-accent" type="button">保存</button>
+    </div>
+
+    <div class="privacy-note">
+      <i>🔒</i> 入力された情報はブラウザ内にのみ保存されます。
+    </div>
+  </div>
+</section>
+      
+      
+      
       </div>
     </div>
 
