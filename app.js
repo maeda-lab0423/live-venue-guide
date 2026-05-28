@@ -404,11 +404,16 @@ function showMyPageScreen() {
       const name = (v.name || '').toLowerCase();
       const aliases = Array.isArray(v.aliases) ? v.aliases : [];
 
-      const matchName = name.includes(query);
-    const matchAlias = query.length >= 2 && aliases.some(alias =>
-  String(alias).toLowerCase().includes(query)
-);
+const matchName =
+  query.length === 1
+    ? name.startsWith(query)
+    : name.includes(query);
 
+const matchAlias =
+  query.length >= 2 &&
+  aliases.some(alias =>
+    String(alias).toLowerCase().includes(query)
+  );
       return matchName || matchAlias;
     });
 
