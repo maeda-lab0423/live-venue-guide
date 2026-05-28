@@ -785,17 +785,17 @@ body {
 }
 
 #recent-toggle-btn {
-  right: 0;
-  border-radius: 12px 0 0 12px;
+  display: flex;
 }
 
 #recent-close-btn {
-  right: 300px;
-  border-radius: 12px 0 0 12px;
   display: none;
 }
 
 .recent-panel.open + #recent-close-btn {
   display: flex;
 }
+
+.recent-panel.open ~ #recent-toggle-btn {
+  display: none;
 }
