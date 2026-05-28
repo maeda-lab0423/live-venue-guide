@@ -140,28 +140,26 @@ const venues = [
     "lat": null,
     "lng": null
   },
-  {
-    "id": "kobe-kokusai-hall",
-    "prefecture": "兵庫県",
-    "area": "神戸",
-    "name": "神戸国際会館こくさいホール",
-   "aliases": [
-  "神戸国際会館こくさいホール",
-  "神戸"
-],
-
-"searchText": "こうべ こうべこくさいかいかん こくさいほーる さんのみや 三宮",
-],
-    "capacity": "2,112席",
-    "address": "",
-    "nearestStation": "各線「三宮駅」",
-    "walkMinutes": "約5分",
-    "officialUrl": "https://www.kih.co.jp/kokusaihall/",
-    "seatingChartUrl": "https://www.kih.co.jp/kokusaihall/seat/",
-    "scheduleUrl": "https://www.kih.co.jp/kokusaihall/event/",
-    "lat": null,
-    "lng": null
-  },
+ {
+  "id": "kobe-kokusai-hall",
+  "prefecture": "兵庫県",
+  "area": "神戸",
+  "name": "神戸国際会館こくさいホール",
+  "aliases": [
+    "神戸国際会館こくさいホール",
+    "神戸"
+  ],
+  "searchText": "こうべ こうべこくさいかいかん こくさいほーる さんのみや 三宮",
+  "capacity": "2,112席",
+  "address": "",
+  "nearestStation": "各線「三宮駅」",
+  "walkMinutes": "約5分",
+  "officialUrl": "https://www.kih.co.jp/kokusaihall/",
+  "seatingChartUrl": "https://www.kih.co.jp/kokusaihall/seat/",
+  "scheduleUrl": "https://www.kih.co.jp/kokusaihall/event/",
+  "lat": null,
+  "lng": null
+},
   {
     "id": "matsukata-hall",
     "prefecture": "兵庫県",
