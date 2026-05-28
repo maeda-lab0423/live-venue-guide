@@ -472,5 +472,39 @@ if (recentCloseBtn) {
   renderFavorites();
   renderRecentVenues();
   updateMyPage();
-  updateClearSearchButton();
+updateClearSearchButton();
+
 });
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+if (recentPanel) {
+
+  recentPanel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  recentPanel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+
+    if (touchEndX - touchStartX > 60) {
+      recentPanel.classList.remove('open');
+      recentToggleBtn.textContent = '＜';
+    }
+  });
+
+  recentPanel.addEventListener('mousedown', (e) => {
+    touchStartX = e.screenX;
+  });
+
+  recentPanel.addEventListener('mouseup', (e) => {
+    touchEndX = e.screenX;
+
+    if (touchEndX - touchStartX > 80) {
+      recentPanel.classList.remove('open');
+      recentToggleBtn.textContent = '＜';
+    }
+  });
+
+}
