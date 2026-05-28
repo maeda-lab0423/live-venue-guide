@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const query = e.target.value.trim().toLowerCase();
     autocompleteList.innerHTML = '';
 
-    if (query.length < 1) {
+    if (query.length < 2) {
       autocompleteList.classList.remove('active');
       return;
     }
