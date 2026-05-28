@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const navSearch = document.getElementById('nav-search');
   const navFavorites = document.getElementById('nav-favorites');
   const navMypage = document.getElementById('nav-mypage');
-  const siteHeader = document.getElementById('site-header');
 
   let currentVenue = null;
 
@@ -60,9 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   navFavorites.classList.remove('active');
   navMypage.classList.remove('active');
 
-  if (siteHeader) {
-    siteHeader.style.display = 'block';
-  }
+  
 
   updateClearSearchButton();
 }
@@ -76,9 +73,6 @@ function showFavoritesScreen() {
   navSearch.classList.remove('active');
   navMypage.classList.remove('active');
 
-  if (siteHeader) {
-    siteHeader.style.display = 'none';
-  }
 
   updateClearSearchButton();
   renderFavorites();
