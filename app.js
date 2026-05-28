@@ -35,7 +35,13 @@ const changeStationBtn = document.getElementById('change-station-btn');
   const navSearch = document.getElementById('nav-search');
   const navFavorites = document.getElementById('nav-favorites');
   const navMypage = document.getElementById('nav-mypage');
-
+const recordDateInput = document.getElementById('record-date');
+const recordArtistInput = document.getElementById('record-artist');
+const recordVenueInput = document.getElementById('record-venue');
+const recordSeatInput = document.getElementById('record-seat');
+const recordMemoInput = document.getElementById('record-memo');
+const saveRecordBtn = document.getElementById('save-record-btn');
+const recordList = document.getElementById('record-list');
   let currentVenue = null;
 
   function getVenueKey(venue) {
@@ -95,6 +101,81 @@ const changeStationBtn = document.getElementById('change-station-btn');
 
     updateClearSearchButton();
     updateMyPage();
+    function getLiveRecords() {
+  try {
+    return JSON.parse(localStorage.getItem('liveRecords')) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveLiveRecords(records) {
+  localStorage.setItem('liveRecords', JSON.stringify(records));
+}
+
+function renderLiveRecords() {
+  if (!recordList) return;
+
+  const records = getLiveRecords();
+  recordList.innerHTML = '';
+
+  if (records.length === 0) {
+    recordList.innerHTML = '<p class="favorites-empty">参戦記録がここに表示されます。</p>';
+    return;
+  }
+
+  records.forEach((record, index) => {
+    const card = document.createElement('div');
+    card.className = 'record-card';
+
+    card.innerHTML = `
+      <div class="record-main">
+        <div class="record-date">${record.date || '日付未設定'}</div>
+        <div class="record-title">${record.artist || 'アーティスト未入力'}</div>
+        <div class="record-meta">${record.venue || ''}</div>
+        <div class="record-meta">${record.seat || ''}</div>
+        <div class="record-memo">${record.memo || ''}</div>
+      </div>
+      <button class="record-delete" type="button">削除</button>
+    `;
+
+    card.querySelector('.record-delete').addEventListener('click', () => {
+      const updated = getLiveRecords();
+      updated.splice(index, 1);
+      saveLiveRecords(updated);
+      renderLiveRecords();
+    });
+
+    recordList.appendChild(card);
+  });
+}
+
+function addLiveRecord() {
+  const record = {
+    date: recordDateInput.value,
+    artist: recordArtistInput.value.trim(),
+    venue: recordVenueInput.value.trim(),
+    seat: recordSeatInput.value.trim(),
+    memo: recordMemoInput.value.trim()
+  };
+
+  if (!record.date && !record.artist && !record.venue && !record.memo) {
+    alert('日付・アーティスト名・会場名など、どれか1つは入力してください。');
+    return;
+  }
+
+  const records = getLiveRecords();
+  records.unshift(record);
+  saveLiveRecords(records);
+
+  recordDateInput.value = '';
+  recordArtistInput.value = '';
+  recordVenueInput.value = '';
+  recordSeatInput.value = '';
+  recordMemoInput.value = '';
+
+  renderLiveRecords();
+}
   }
 
   function getFavorites() {
@@ -467,6 +548,9 @@ if (clearSearchBtn) {
   if (navSearch) navSearch.addEventListener('click', showSearchScreen);
   if (navFavorites) navFavorites.addEventListener('click', showFavoritesScreen);
   if (navMypage) navMypage.addEventListener('click', showMyPageScreen);
+  if (saveRecordBtn) {
+  saveRecordBtn.addEventListener('click', addLiveRecord);
+}
   if (changeStationBtn) {
   changeStationBtn.addEventListener('click', () => {
     stationDisplayArea.style.display = 'none';
@@ -490,13 +574,14 @@ if (recentToggleBtn && recentPanel) {
     }
   });
 }
-
+  
+’初期表示
   renderFavorites();
   renderRecentVenues();
   updateMyPage();
   updateStationSettingView();
-updateClearSearchButton();
-
+　updateClearSearchButton();
+　renderLiveRecords();
 
 
 let touchStartX = 0;
