@@ -463,12 +463,6 @@ if (recentToggleBtn && recentPanel) {
   });
 }
 
-if (recentCloseBtn) {
-  recentCloseBtn.addEventListener('click', () => {
-    recentPanel.classList.remove('open');
-  });
-}
-
   renderFavorites();
   renderRecentVenues();
   updateMyPage();
@@ -508,3 +502,4 @@ if (recentPanel) {
   });
 
 }
+});
