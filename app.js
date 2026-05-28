@@ -1,6 +1,7 @@
 // import { venues } from './data.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const headerSearchArea = document.getElementById('header-search-area');
   const searchInput = document.getElementById('search-input');
   const autocompleteList = document.getElementById('autocomplete-list');
   const homeStationInput = document.getElementById('home-station');
@@ -59,11 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
   navFavorites.classList.remove('active');
   navMypage.classList.remove('active');
 
-  
+  if (headerSearchArea) {
+    headerSearchArea.style.display = 'block';
+  }
 
   updateClearSearchButton();
 }
-
+  
 function showFavoritesScreen() {
   favoritesScreen.classList.add('active');
   searchScreen.classList.remove('active');
@@ -73,6 +76,9 @@ function showFavoritesScreen() {
   navSearch.classList.remove('active');
   navMypage.classList.remove('active');
 
+  if (headerSearchArea) {
+    headerSearchArea.style.display = 'none';
+  }
 
   updateClearSearchButton();
   renderFavorites();
@@ -87,8 +93,8 @@ function showMyPageScreen() {
   navSearch.classList.remove('active');
   navFavorites.classList.remove('active');
 
-  if (siteHeader) {
-    siteHeader.style.display = 'none';
+  if (headerSearchArea) {
+    headerSearchArea.style.display = 'none';
   }
 
   updateClearSearchButton();
