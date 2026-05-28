@@ -405,9 +405,9 @@ function showMyPageScreen() {
       const aliases = Array.isArray(v.aliases) ? v.aliases : [];
 
       const matchName = name.includes(query);
-      const matchAlias = aliases.some(alias =>
-        String(alias).toLowerCase().includes(query)
-      );
+    const matchAlias = query.length >= 2 && aliases.some(alias =>
+  String(alias).toLowerCase().includes(query)
+);
 
       return matchName || matchAlias;
     });
