@@ -391,14 +391,63 @@ function showMyPageScreen() {
     updateMyPage();
   });
 
-  searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.trim().toLowerCase();
-    autocompleteList.innerHTML = '';
+searchInput.addEventListener('input', (e) => {
+  const query = e.target.value.trim().toLowerCase();
 
-    if (query.length < 1) {
-      autocompleteList.classList.remove('active');
-      return;
-    }
+  autocompleteList.innerHTML = '';
+
+  if (query.length < 1) {
+    autocompleteList.classList.remove('active');
+    return;
+  }
+
+  const matches = venues.filter(v => {
+    const aliases = Array.isArray(v.aliases) ? v.aliases : [];
+
+    const searchText = [
+      v.name,
+      v.prefecture,
+      v.area,
+      v.nearestStation,
+      v.searchText,
+      ...aliases
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    return searchText.includes(query);
+  });
+
+  if (matches.length > 0) {
+    matches.forEach(venue => {
+      const li = document.createElement('li');
+
+      li.className = 'autocomplete-item';
+
+      li.innerHTML = `
+        <span class="autocomplete-name">${venue.name}</span>
+        <span class="autocomplete-meta">${venue.nearestStation || ''}</span>
+      `;
+
+      li.addEventListener('click', () => {
+        searchInput.value = venue.name;
+
+        autocompleteList.classList.remove('active');
+
+        showSearchScreen();
+        showVenueDetails(venue);
+      });
+
+      autocompleteList.appendChild(li);
+    });
+
+    autocompleteList.classList.add('active');
+
+  } else {
+    autocompleteList.classList.remove('active');
+  }
+});
 
 const name = (v.name || '').toLowerCase();
 const kana = (v.kana || '').toLowerCase();
