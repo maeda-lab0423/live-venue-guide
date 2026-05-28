@@ -436,7 +436,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (favoriteBtn) favoriteBtn.addEventListener('click', toggleFavorite);
-  if (clearSearchBtn) clearSearchBtn.addEventListener('click', closeVenueDetails);
+if (clearSearchBtn) {
+  clearSearchBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    autocompleteList.innerHTML = '';
+    autocompleteList.classList.remove('active');
+    clearSearchBtn.classList.remove('visible');
+    searchInput.focus();
+  });
+}
   if (navSearch) navSearch.addEventListener('click', showSearchScreen);
   if (navFavorites) navFavorites.addEventListener('click', showFavoritesScreen);
   if (navMypage) navMypage.addEventListener('click', showMyPageScreen);
