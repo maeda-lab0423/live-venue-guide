@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const favoritesList = document.getElementById('favorites-list');
   const recentList = document.getElementById('recent-list');
   const clearSearchBtn = document.getElementById('clear-search-btn');
+  const stationDisplayArea = document.getElementById('station-display-area');
+const stationEditArea = document.getElementById('station-edit-area');
+const stationDisplayName = document.getElementById('station-display-name');
+const changeStationBtn = document.getElementById('change-station-btn');
 
   const searchScreen = document.getElementById('search-screen');
   const favoritesScreen = document.getElementById('favorites-screen');
@@ -264,7 +268,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (favoritesCountEl) favoritesCountEl.textContent = `${favorites.length}件`;
     if (recentCountEl) recentCountEl.textContent = `${recent.length}件`;
   }
+function updateStationSettingView() {
+  const homeStation = localStorage.getItem('homeStation');
 
+  if (!stationDisplayArea || !stationEditArea || !stationDisplayName) return;
+
+  if (homeStation) {
+    stationDisplayName.textContent = homeStation;
+    stationDisplayArea.style.display = 'block';
+    stationEditArea.style.display = 'none';
+  } else {
+    stationDisplayName.textContent = '未設定';
+    stationDisplayArea.style.display = 'none';
+    stationEditArea.style.display = 'block';
+  }
+}
   function updateTransitLink(venue) {
     const homeStation = localStorage.getItem('homeStation');
 
@@ -373,6 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateMyPage();
+    updateStationSettingView();
   });
 
   searchInput.addEventListener('input', (e) => {
@@ -448,6 +467,15 @@ if (clearSearchBtn) {
   if (navSearch) navSearch.addEventListener('click', showSearchScreen);
   if (navFavorites) navFavorites.addEventListener('click', showFavoritesScreen);
   if (navMypage) navMypage.addEventListener('click', showMyPageScreen);
+  if (changeStationBtn) {
+  changeStationBtn.addEventListener('click', () => {
+    stationDisplayArea.style.display = 'none';
+    stationEditArea.style.display = 'block';
+    homeStationInput.value = localStorage.getItem('homeStation') || '';
+    homeStationInput.focus();
+  });
+}
+  
  const recentPanel = document.getElementById('recent-section');
 const recentToggleBtn = document.getElementById('recent-toggle-btn');
 
@@ -466,6 +494,7 @@ if (recentToggleBtn && recentPanel) {
   renderFavorites();
   renderRecentVenues();
   updateMyPage();
+  updateStationSettingView();
 updateClearSearchButton();
 
 
