@@ -575,7 +575,7 @@ if (recentToggleBtn && recentPanel) {
   });
 }
   
-’初期表示
+
   renderFavorites();
   renderRecentVenues();
   updateMyPage();
