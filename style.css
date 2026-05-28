@@ -759,8 +759,7 @@ body {
   right: 0;
 }
 
-#recent-toggle-btn,
-#recent-close-btn {
+#recent-toggle-btn {
   position: fixed;
   top: 180px;
   z-index: 301;
@@ -783,12 +782,5 @@ body {
   display: flex;
 }
 
-#recent-close-btn {
-  right: 300px;
-  border-radius: 12px 0 0 12px;
-  display: none;
-}
 
-.recent-panel.open + #recent-close-btn {
-  display: flex;
-}
+
